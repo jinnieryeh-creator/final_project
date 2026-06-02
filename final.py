@@ -1,0 +1,111 @@
+import numpy as np
+import pandas as pd
+import streamlit as st
+
+st.set_page_config(page_title="熱力學數據分析站", layout="wide")
+st.title("熱力學數據分析與模擬工具")
+st.markdown(
+    "本系統結合 **NumPy (矩陣運算)** 與 **Pandas (資料處理)**，提供完整的數據導出與互動模擬。"
+)
+
+st.sidebar.header("參數設定")
+gas_type = st.sidebar.selectbox(
+    "氣體公式", ["理想氣體 (Ideal Gas)", "范德華氣體 (Van der Waals)"]
+)
+T = st.sidebar.slider("溫度 T (K)", 200, 800, 300, 10)
+n = st.sidebar.number_input("物質的量 n (mol)", 0.1, 5.0, 1.0, 0.1)
+R = 8.314
+a = 3.64 if gas_type == "范德華氣體 (Van der Waals)" else 0.0
+b = 0.0427 if gas_type == "范德華氣體 (Van der Waals)" else 0.0
+
+# 體積陣列
+V_array = np.linspace(0.5, 10.0, 50)
+
+# 單位換算
+V_m3 = V_array * 1e-3
+b_m3 = b * 1e-3 * n
+a_pa = a * 0.1
+
+# 算壓力
+if gas_type == "理想氣體 (Ideal Gas)":
+    P_array = (n * R * T) / V_m3
+else:
+    P_array = (n * R * T) / (V_m3 - b_m3) - a_pa * (n / V_m3) ** 2
+
+P_bar = P_array / 1e5
+
+# 算內能
+if gas_type == "理想氣體 (Ideal Gas)":
+    U_array = np.full_like(V_array, 1.5 * n * R * T)
+else:
+    U_array = 1.5 * n * R * T - (a_pa * (n**2) / V_m3)
+
+df = pd.DataFrame(
+    {
+        "體積_Volume_L": V_array,
+        "壓力_Pressure_bar": P_bar,
+        "內能_InternalEnergy_J": U_array,
+    }
+)
+
+# 算PV
+df["PV_乘積_bar_L"] = df["體積_Volume_L"] * df["壓力_Pressure_bar"]
+
+# 網頁前端呈現
+col1, col2 = st.columns([1, 1])
+with col1:
+    st.subheader("熱力學數據圖表")
+
+    # 💡 這裡改用 Streamlit 內建的高級互動圖表！
+    # 準備一個專門用來畫圖的 DataFrame，將體積設為 X 軸（索引）
+    chart_data = df.set_index("體積_Volume_L")
+
+    st.markdown("**壓力變化曲線 (Pressure vs Volume)**")
+    st.line_chart(chart_data["壓力_Pressure_bar"], color="#FF4B4B")
+
+    st.markdown("**內能變化曲線 (Internal Energy vs Volume)**")
+    st.line_chart(chart_data["內能_InternalEnergy_J"], color="#0068C9")
+
+with col2:
+    st.subheader("Pandas 實時數據表 (DataFrame)")
+    st.markdown("這是後端 Pandas 處理完的數據，已直接渲染至前端：")
+
+    st.dataframe(df.style.format("{:.3f}"), height=300)
+
+    csv = df.to_csv(index=False).encode("utf-8")
+    st.download_button(
+        label="下載此熱力學數據 (CSV)",
+        data=csv,
+        file_name=f"thermo_data_{T}K.csv",
+        mime="text/csv",
+    )
+
+# 數據摘要分析
+st.write("---")
+st.subheader("Pandas 自動數據摘要分析")
+
+col3, col4, col5 = st.columns(3)
+with col3:
+    st.metric(
+        label="最高壓力 (Max Pressure)",
+        value=f"{df['壓力_Pressure_bar'].max():.2f} bar",
+    )
+with col4:
+    st.metric(
+        label="最低內能 (Min Energy)",
+        value=f"{df['內能_InternalEnergy_J'].min():.2f} J",
+    )
+with col5:
+    pv_std = df["PV_乘積_bar_L"].std()
+    st.metric(
+        label="PV 乘積標準差 (波動度)",
+        value=f"{pv_std:.4f}",
+        help="理想氣體的標準差應接近 0",
+    )
+
+st.markdown("""
+### 程式碼背後的運作邏輯：
+1. **NumPy** 在背景負責快速進行大量的物理公式矩陣運算。
+2. **Pandas** 將算好的多維陣列組裝成有標籤、有結構的 `DataFrame`，並計算衍生欄位（如 `PV_乘積`）。
+3. **Streamlit** 當作前端橋樑，直接用 `st.dataframe(df)` 把 Pandas 的表格完美畫在瀏覽器上，並提供一鍵下載。
+""")
