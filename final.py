@@ -19,8 +19,8 @@ gas_type = st.sidebar.selectbox(
 gas_molecule = st.sidebar.selectbox(
     "氣體類型", ["單原子分子","雙原子分子"]
 )
-T = st.sidebar.number_input("溫度(K)", min_value = 0.1,vaule = 273.15)
-n = st.sidebar.number_input("物質的量(mol)", min_value = 0.1, vaule = 1.00)
+T = st.sidebar.number_input("溫度(K)", min_value = 0.1)
+n = st.sidebar.number_input("物質的量(mol)", min_value = 0.1)
 R = 8.314
 a = 3.64 if gas_type == "凡德瓦氣體" else 0.0
 b = 0.0427 if gas_type == "凡德瓦氣體" else 0.0
@@ -127,7 +127,7 @@ with col6:
         help="理想氣體的標準差應接近 0",
     )
 st.write("----")
-st.subheader("程式碼背後的運作:")
+st.subheader("程式碼邏輯:")
 st.markdown("""
         1. NumPy在背景負責快速進行大量的物理公式矩陣運算。
         2. Pandas將算好的多維陣列組裝成有標籤、有結構的DataFrame，並計算。
