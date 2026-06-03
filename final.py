@@ -19,16 +19,16 @@ gas_type = st.sidebar.selectbox(
 gas_molecule = st.sidebar.selectbox(
     "氣體類型", ["單原子分子","雙原子分子"]
 )
-T = st.sidebar.number_input("溫度(K)", min_value= 0.1)
-n = st.sidebar.number_input("物質的量(mol)", min_value = 0.1)
+T = st.sidebar.number_input("溫度(K)", min_value = 0.1,vaule = 273.15)
+n = st.sidebar.number_input("物質的量(mol)", min_value = 0.1, vaule = 1.00)
 R = 8.314
 a = 3.64 if gas_type == "凡德瓦氣體" else 0.0
 b = 0.0427 if gas_type == "凡德瓦氣體" else 0.0
 
 if gas_molecule == "單原子分子":
-    Cv = 1.67 * R
+    Cv = 1.50 * R
 else:
-    Cv = 1.40 * R
+    Cv = 2.50 * R
     
 V_array = np.linspace(0.5, 10.0, 50)
 
@@ -49,7 +49,7 @@ P_bar = P_array / 1e5
 if gas_type == "理想氣體":
     U_array = np.full_like(V_array, 1.5 * n * R * T)
 else:
-    U_array = 1.5 * n * R * T - (a_pa * (n**2) / V_m3)
+    U_array = Cv * n * R * T - (a_pa * (n**2) / V_m3)
 
 #算總熵
 Vm_array = V_m3 / n  
@@ -128,9 +128,7 @@ with col6:
     )
 st.write("----")
 st.subheader("程式碼背後的運作:")
-col7 = st.columns(1)
-with col7:
-    st.markdown("""
+st.markdown("""
         1. NumPy在背景負責快速進行大量的物理公式矩陣運算。
         2. Pandas將算好的多維陣列組裝成有標籤、有結構的DataFrame，並計算。
         3. Streamlit當作前端橋樑，直接用st.dataframe(df)把 Pandas 的表格完美畫在瀏覽器上，並提供一鍵下載。
