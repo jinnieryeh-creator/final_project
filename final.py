@@ -16,12 +16,20 @@ st.sidebar.header("參數設定")
 gas_type = st.sidebar.selectbox(
     "氣體公式", ["理想氣體", "凡德瓦氣體"]
 )
+gas_molecule = st.sidebar.selectbox(
+    ["單原子分子","雙原子分子"]
+)
 T = st.sidebar.number_input("溫度(K)")
 n = st.sidebar.number_input("物質的量(mol)")
 R = 8.314
 a = 3.64 if gas_type == "凡德瓦氣體" else 0.0
 b = 0.0427 if gas_type == "凡德瓦氣體" else 0.0
 
+if gas_molecule == "單原子分子":
+    Cv = 1.67 * R
+else:
+    Cv = 1.40 * R
+    
 V_array = np.linspace(0.5, 10.0, 50)
 
 # 單位換算
@@ -43,11 +51,21 @@ if gas_type == "理想氣體":
 else:
     U_array = 1.5 * n * R * T - (a_pa * (n**2) / V_m3)
 
+#算總熵
+Vm_array = V_m3 / n  
+if gas_type == "理想氣體":
+    S_array = Cv * np.log(T) + R * np.log(Vm_array)
+else:
+    S_array = Cv * np.log(T) + R * np.log(Vm_array - (b * 1e-3))
+
+S_array = n * S_array
+
 df = pd.DataFrame(
     {
         "體積": V_array,
         "壓力": P_bar,
         "內能": U_array,
+        "熵": S_array
     }
 )
 
@@ -66,6 +84,9 @@ with col1:
 
     st.markdown("**內能對體積**")
     st.line_chart(chart_data["內能"], color="#0068C9")
+
+    st.markdown("**熵對體積**")
+    st.line_chart(chart_data["熵"], color="#2CA02C")
 
 with col2:
     st.subheader("數據表")
@@ -93,7 +114,12 @@ with col4:
         label="最低內能",
         value=f"{df['內能'].min():.2f} J",
     )
-with col5:
+with co15:
+    st.metric(
+        label="最大熵",
+        value=f"{df['熵'].max();.2f} ",
+    )
+with col6:
     pv_std = df["PV_乘積"].std()
     st.metric(
         label="PV標準差 (波動度)",
