@@ -14,10 +14,10 @@ st.markdown(
 
 st.sidebar.header("參數設定")
 gas_type = st.sidebar.selectbox(
-    "氣體公式", ["理想氣體 (Ideal Gas)", "凡德瓦氣體 (Van der Waals)"]
+    "氣體公式", ["理想氣體", "凡德瓦氣體"]
 )
-T = st.sidebar.number_input("溫度 T (K)")
-n = st.sidebar.number_input("物質的量 n (mol)")
+T = st.sidebar.number_input("溫度(K)")
+n = st.sidebar.number_input("物質的量(mol)")
 R = 8.314
 a = 3.64 if gas_type == "凡德瓦氣體 (Van der Waals)" else 0.0
 b = 0.0427 if gas_type == "凡德瓦氣體 (Van der Waals)" else 0.0
@@ -45,9 +45,9 @@ else:
 
 df = pd.DataFrame(
     {
-        "體積_Volume_L": V_array,
-        "壓力_Pressure_bar": P_bar,
-        "內能_InternalEnergy_J": U_array,
+        "體積": V_array,
+        "壓力": P_bar,
+        "內能": U_array,
     }
 )
 
@@ -61,10 +61,10 @@ with col1:
 
     chart_data = df.set_index("體積_Volume_L")
 
-    st.markdown("**壓力對體積 (Pressure vs Volume)**")
+    st.markdown("**壓力對體積**")
     st.line_chart(chart_data["壓力_Pressure_bar"], color="#FF4B4B")
 
-    st.markdown("**內能對體積 (Internal Energy vs Volume)**")
+    st.markdown("**內能對體積**")
     st.line_chart(chart_data["內能_InternalEnergy_J"], color="#0068C9")
 
 with col2:
@@ -85,18 +85,18 @@ st.subheader("數據摘要")
 col3, col4, col5 = st.columns(3)
 with col3:
     st.metric(
-        label="最高壓力 (Max Pressure)",
+        label="最高壓力",
         value=f"{df['壓力_Pressure_bar'].max():.2f} bar",
     )
 with col4:
     st.metric(
-        label="最低內能 (Min Energy)",
+        label="最低內能",
         value=f"{df['內能_InternalEnergy_J'].min():.2f} J",
     )
 with col5:
     pv_std = df["PV_乘積_bar_L"].std()
     st.metric(
-        label="PV 乘積標準差 (波動度)",
+        label="PV標準差 (波動度)",
         value=f"{pv_std:.4f}",
         help="理想氣體的標準差應接近 0",
     )
@@ -105,5 +105,5 @@ st.markdown("""
 程式碼背後的運作邏輯：
 1. NumPy在背景負責快速進行大量的物理公式矩陣運算。
 2. Pandas將算好的多維陣列組裝成有標籤、有結構的DataFrame，並計算（如 PV_乘積）。
-3. Streamlit當作前端橋樑，直接用st.dataframe(df)`把 Pandas 的表格完美畫在瀏覽器上，並提供一鍵下載。
+3. Streamlit當作前端橋樑，直接用st.dataframe(df)把 Pandas 的表格完美畫在瀏覽器上，並提供一鍵下載。
 """)
