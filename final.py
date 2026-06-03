@@ -19,8 +19,8 @@ gas_type = st.sidebar.selectbox(
 T = st.sidebar.number_input("溫度(K)")
 n = st.sidebar.number_input("物質的量(mol)")
 R = 8.314
-a = 3.64 if gas_type == "凡德瓦氣體 (Van der Waals)" else 0.0
-b = 0.0427 if gas_type == "凡德瓦氣體 (Van der Waals)" else 0.0
+a = 3.64 if gas_type == "凡德瓦氣體" else 0.0
+b = 0.0427 if gas_type == "凡德瓦氣體" else 0.0
 
 V_array = np.linspace(0.5, 10.0, 50)
 
