@@ -75,7 +75,7 @@ df["PV_乘積"] = df["體積"] * df["壓力"]
 # 網頁前端
 col1, col2 = st.columns([1, 1])
 with col1:
-    st.subheader("數據圖表")
+    st.subheader("數據圖")
 
     chart_data = df.set_index("體積")
 
