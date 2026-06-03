@@ -19,8 +19,8 @@ gas_type = st.sidebar.selectbox(
 gas_molecule = st.sidebar.selectbox(
     "氣體類型", ["單原子分子","雙原子分子"]
 )
-T = st.sidebar.number_input("溫度(K)")
-n = st.sidebar.number_input("物質的量(mol)")
+T = st.sidebar.number_input("溫度(K)", min_value= 0.1)
+n = st.sidebar.number_input("物質的量(mol)", min_value = 0.1)
 R = 8.314
 a = 3.64 if gas_type == "凡德瓦氣體" else 0.0
 b = 0.0427 if gas_type == "凡德瓦氣體" else 0.0
