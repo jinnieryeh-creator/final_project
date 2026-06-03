@@ -94,7 +94,7 @@ with col4:
         value=f"{df['內能'].min():.2f} J",
     )
 with col5:
-    pv_std = df["PV_乘積_bar_L"].std()
+    pv_std = df["PV_乘積"].std()
     st.metric(
         label="PV標準差 (波動度)",
         value=f"{pv_std:.4f}",
