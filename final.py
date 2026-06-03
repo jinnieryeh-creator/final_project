@@ -52,20 +52,20 @@ df = pd.DataFrame(
 )
 
 # 算PV
-df["PV_乘積_bar_L"] = df["體積_Volume_L"] * df["壓力_Pressure_bar"]
+df["PV_乘積"] = df["體積"] * df["壓力"]
 
 # 網頁前端
 col1, col2 = st.columns([1, 1])
 with col1:
     st.subheader("數據圖表")
 
-    chart_data = df.set_index("體積_Volume_L")
+    chart_data = df.set_index("體積")
 
     st.markdown("**壓力對體積**")
-    st.line_chart(chart_data["壓力_Pressure_bar"], color="#FF4B4B")
+    st.line_chart(chart_data["壓力"], color="#FF4B4B")
 
     st.markdown("**內能對體積**")
-    st.line_chart(chart_data["內能_InternalEnergy_J"], color="#0068C9")
+    st.line_chart(chart_data["內能"], color="#0068C9")
 
 with col2:
     st.subheader("數據表")
@@ -86,12 +86,12 @@ col3, col4, col5 = st.columns(3)
 with col3:
     st.metric(
         label="最高壓力",
-        value=f"{df['壓力_Pressure_bar'].max():.2f} bar",
+        value=f"{df['壓力'].max():.2f} bar",
     )
 with col4:
     st.metric(
         label="最低內能",
-        value=f"{df['內能_InternalEnergy_J'].min():.2f} J",
+        value=f"{df['內能'].min():.2f} J",
     )
 with col5:
     pv_std = df["PV_乘積_bar_L"].std()
