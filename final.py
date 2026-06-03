@@ -14,10 +14,10 @@ st.markdown(
 
 st.sidebar.header("參數設定")
 gas_type = st.sidebar.selectbox(
-    "氣體公式", ["理想氣體", "凡德瓦氣體"]
+    "氣體類型", ["理想氣體", "凡德瓦氣體"]
 )
 gas_molecule = st.sidebar.selectbox(
-    "氣體類型", ["單原子分子","雙原子分子"]
+    "分子類型", ["單原子分子","雙原子分子"]
 )
 T = st.sidebar.number_input("溫度(K)", min_value = 0.1)
 n = st.sidebar.number_input("物質的量(mol)", min_value = 0.1)
@@ -129,7 +129,7 @@ with col6:
 st.write("----")
 st.subheader("程式碼邏輯:")
 st.markdown("""
-        1. NumPy在背景負責快速進行大量的物理公式矩陣運算。
-        2. Pandas將算好的多維陣列組裝成有標籤、有結構的DataFrame，並計算。
-        3. Streamlit當作前端橋樑，直接用st.dataframe(df)把 Pandas 的表格完美畫在瀏覽器上，並提供一鍵下載。
+        1. NumPy在後端進行物理公式矩陣運算。
+        2. Pandas將算好的多維陣列組裝成有命名、有結構的DataFrame，並計算。
+        3. Streamlit當作前端橋樑，直接用st.dataframe(df)把 Pandas 的表格呈現到前端。
     """)
