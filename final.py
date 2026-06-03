@@ -117,7 +117,7 @@ with col4:
 with co15:
     st.metric(
         label="最大熵",
-        value=f"{df['熵'].max();.2f} ",
+        value=f"{df['熵'].max():.2f} ",
     )
 with col6:
     pv_std = df["PV_乘積"].std()
