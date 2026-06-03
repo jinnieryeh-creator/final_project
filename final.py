@@ -1,24 +1,27 @@
+#Python final project
+#葉庭涵 B135090026
+#https://finalproject-ljvsdder6dvb7pn5ueh9vj.streamlit.app/
+
 import numpy as np
 import pandas as pd
 import streamlit as st
 
-st.set_page_config(page_title="熱力學數據分析站", layout="wide")
-st.title("熱力學數據分析與模擬工具")
+st.set_page_config(page_title="熱力學作業解題網站", layout="wide")
+st.title("針對普物二:熱力學")
 st.markdown(
-    "本系統結合 **NumPy (矩陣運算)** 與 **Pandas (資料處理)**，提供完整的數據導出與互動模擬。"
+    "NumPy矩陣運算，Pandas資料處理"
 )
 
 st.sidebar.header("參數設定")
 gas_type = st.sidebar.selectbox(
-    "氣體公式", ["理想氣體 (Ideal Gas)", "范德華氣體 (Van der Waals)"]
+    "氣體公式", ["理想氣體 (Ideal Gas)", "凡德瓦氣體 (Van der Waals)"]
 )
-T = st.sidebar.slider("溫度 T (K)", 200, 800, 300, 10)
-n = st.sidebar.number_input("物質的量 n (mol)", 0.1, 5.0, 1.0, 0.1)
+T = st.sidebar.number_input("溫度 T (K)")
+n = st.sidebar.number_input("物質的量 n (mol)")
 R = 8.314
-a = 3.64 if gas_type == "范德華氣體 (Van der Waals)" else 0.0
-b = 0.0427 if gas_type == "范德華氣體 (Van der Waals)" else 0.0
+a = 3.64 if gas_type == "凡德瓦氣體 (Van der Waals)" else 0.0
+b = 0.0427 if gas_type == "凡德瓦氣體 (Van der Waals)" else 0.0
 
-# 體積陣列
 V_array = np.linspace(0.5, 10.0, 50)
 
 # 單位換算
@@ -51,13 +54,11 @@ df = pd.DataFrame(
 # 算PV
 df["PV_乘積_bar_L"] = df["體積_Volume_L"] * df["壓力_Pressure_bar"]
 
-# 網頁前端呈現
+# 網頁前端
 col1, col2 = st.columns([1, 1])
 with col1:
     st.subheader("熱力學數據圖表")
 
-    # 💡 這裡改用 Streamlit 內建的高級互動圖表！
-    # 準備一個專門用來畫圖的 DataFrame，將體積設為 X 軸（索引）
     chart_data = df.set_index("體積_Volume_L")
 
     st.markdown("**壓力變化曲線 (Pressure vs Volume)**")
@@ -80,7 +81,6 @@ with col2:
         mime="text/csv",
     )
 
-# 數據摘要分析
 st.write("---")
 st.subheader("Pandas 自動數據摘要分析")
 
@@ -104,8 +104,8 @@ with col5:
     )
 
 st.markdown("""
-### 程式碼背後的運作邏輯：
-1. **NumPy** 在背景負責快速進行大量的物理公式矩陣運算。
-2. **Pandas** 將算好的多維陣列組裝成有標籤、有結構的 `DataFrame`，並計算衍生欄位（如 `PV_乘積`）。
-3. **Streamlit** 當作前端橋樑，直接用 `st.dataframe(df)` 把 Pandas 的表格完美畫在瀏覽器上，並提供一鍵下載。
+程式碼背後的運作邏輯：
+1. NumPy在背景負責快速進行大量的物理公式矩陣運算。
+2. Pandas將算好的多維陣列組裝成有標籤、有結構的DataFrame，並計算（如 `PV_乘積`）。
+3. Streamlit當作前端橋樑，直接用st.dataframe(df)`把 Pandas 的表格完美畫在瀏覽器上，並提供一鍵下載。
 """)
