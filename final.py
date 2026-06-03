@@ -7,9 +7,9 @@ import pandas as pd
 import streamlit as st
 
 st.set_page_config(page_title="熱力學作業解題網站", layout="wide")
-st.title("針對普物二:熱力學")
+st.title("熱力學作業解題網站")
 st.markdown(
-    "NumPy矩陣運算，Pandas資料處理"
+    "針對普物二:熱力學"
 )
 
 st.sidebar.header("參數設定")
@@ -57,20 +57,18 @@ df["PV_乘積_bar_L"] = df["體積_Volume_L"] * df["壓力_Pressure_bar"]
 # 網頁前端
 col1, col2 = st.columns([1, 1])
 with col1:
-    st.subheader("熱力學數據圖表")
+    st.subheader("數據圖表")
 
     chart_data = df.set_index("體積_Volume_L")
 
-    st.markdown("**壓力變化曲線 (Pressure vs Volume)**")
+    st.markdown("**壓力對體積 (Pressure vs Volume)**")
     st.line_chart(chart_data["壓力_Pressure_bar"], color="#FF4B4B")
 
-    st.markdown("**內能變化曲線 (Internal Energy vs Volume)**")
+    st.markdown("**內能對體積 (Internal Energy vs Volume)**")
     st.line_chart(chart_data["內能_InternalEnergy_J"], color="#0068C9")
 
 with col2:
-    st.subheader("Pandas 實時數據表 (DataFrame)")
-    st.markdown("這是後端 Pandas 處理完的數據，已直接渲染至前端：")
-
+    st.subheader("數據表")
     st.dataframe(df.style.format("{:.3f}"), height=300)
 
     csv = df.to_csv(index=False).encode("utf-8")
@@ -82,7 +80,7 @@ with col2:
     )
 
 st.write("---")
-st.subheader("Pandas 自動數據摘要分析")
+st.subheader("數據摘要")
 
 col3, col4, col5 = st.columns(3)
 with col3:
@@ -106,6 +104,6 @@ with col5:
 st.markdown("""
 程式碼背後的運作邏輯：
 1. NumPy在背景負責快速進行大量的物理公式矩陣運算。
-2. Pandas將算好的多維陣列組裝成有標籤、有結構的DataFrame，並計算（如 `PV_乘積`）。
+2. Pandas將算好的多維陣列組裝成有標籤、有結構的DataFrame，並計算（如 PV_乘積）。
 3. Streamlit當作前端橋樑，直接用st.dataframe(df)`把 Pandas 的表格完美畫在瀏覽器上，並提供一鍵下載。
 """)
