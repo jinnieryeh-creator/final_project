@@ -30,7 +30,7 @@ b_m3 = b * 1e-3 * n
 a_pa = a * 0.1
 
 # 算壓力
-if gas_type == "理想氣體 (Ideal Gas)":
+if gas_type == "理想氣體":
     P_array = (n * R * T) / V_m3
 else:
     P_array = (n * R * T) / (V_m3 - b_m3) - a_pa * (n / V_m3) ** 2
@@ -38,7 +38,7 @@ else:
 P_bar = P_array / 1e5
 
 # 算內能
-if gas_type == "理想氣體 (Ideal Gas)":
+if gas_type == "理想氣體":
     U_array = np.full_like(V_array, 1.5 * n * R * T)
 else:
     U_array = 1.5 * n * R * T - (a_pa * (n**2) / V_m3)
