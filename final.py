@@ -126,10 +126,12 @@ with col6:
         value=f"{pv_std:.4f}",
         help="理想氣體的標準差應接近 0",
     )
+st.write("----")
+st.subheader("程式碼背後的運作:")
 
-st.markdown("""
-程式碼背後的運作邏輯：
-1. NumPy在背景負責快速進行大量的物理公式矩陣運算。
-2. Pandas將算好的多維陣列組裝成有標籤、有結構的DataFrame，並計算（如 PV_乘積）。
-3. Streamlit當作前端橋樑，直接用st.dataframe(df)把 Pandas 的表格完美畫在瀏覽器上，並提供一鍵下載。
-""")
+with col7:
+    st.markdown("""
+        1. NumPy在背景負責快速進行大量的物理公式矩陣運算。
+        2. Pandas將算好的多維陣列組裝成有標籤、有結構的DataFrame，並計算。
+        3. Streamlit當作前端橋樑，直接用st.dataframe(df)把 Pandas 的表格完美畫在瀏覽器上，並提供一鍵下載。
+    """)
