@@ -128,7 +128,7 @@ with col6:
     )
 st.write("----")
 st.subheader("程式碼背後的運作:")
-
+col7 = st.columns(1)
 with col7:
     st.markdown("""
         1. NumPy在背景負責快速進行大量的物理公式矩陣運算。
