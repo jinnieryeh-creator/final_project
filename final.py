@@ -114,7 +114,7 @@ with col4:
         label="最低內能",
         value=f"{df['內能'].min():.2f} J",
     )
-with co15:
+with col5:
     st.metric(
         label="最大熵",
         value=f"{df['熵'].max():.2f} ",
