@@ -103,7 +103,7 @@ with col2:
 st.write("---")
 st.subheader("數據摘要")
 
-col3, col4, col5 = st.columns(3)
+col3, col4, col5, col6 = st.columns(4)
 with col3:
     st.metric(
         label="最高壓力",
